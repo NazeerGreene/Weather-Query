@@ -2,6 +2,7 @@ package com.learn.WeatherApp.controller;
 
 import com.learn.WeatherApp.models.WeatherResponse;
 import com.learn.WeatherApp.service.VisualCrossingImpl;
+import com.learn.WeatherApp.service.WeatherService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +15,9 @@ import java.util.Optional;
 
 @RestController
 public class WeatherController {
-    private final VisualCrossingImpl weatherService;
+    private final WeatherService weatherService;
 
-    public WeatherController(VisualCrossingImpl weatherService) {
+    public WeatherController(WeatherService weatherService) {
         this.weatherService = weatherService;
     }
 
