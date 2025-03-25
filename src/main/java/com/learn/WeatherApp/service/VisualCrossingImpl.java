@@ -25,18 +25,18 @@ public class VisualCrossingImpl implements WeatherService {
         this.apiKey = apiKey;
     }
 
-    public WeatherResponse atZipCode(@NonNull String zip) {
+    public WeatherResponse atLocation(@NonNull String location) {
         return new VisualCrossingWeatherFetcher(baseUrl, apiKey)
-                .onLocation(zip)
+                .onLocation(location)
                 .fetch();
     }
 
-    public WeatherResponse atZipCodeBetweenDates (@NonNull String zip, @NonNull String start, String end) throws DateTimeParseException {
+    public WeatherResponse atLocationBetweenDates (@NonNull String location, @NonNull String start, String end) throws DateTimeParseException {
         LocalDate date1 = parseDate(start);
         LocalDate date2 = (end != null ? parseDate(end) : null);
 
         return new VisualCrossingWeatherFetcher(baseUrl, apiKey)
-                .onLocation(zip)
+                .onLocation(location)
                 .betweenDates(date1, date2)
                 .fetch();
     }

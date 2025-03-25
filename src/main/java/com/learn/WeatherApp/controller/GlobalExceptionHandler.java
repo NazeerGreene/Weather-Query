@@ -12,7 +12,7 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(HttpClientErrorException.TooManyRequests.class)
-    public static ResponseEntity<String> tooManyRequestsError(HttpClientErrorException err) {
+    public static ResponseEntity<String> tooManyRequestsException(HttpClientErrorException ignored) {
         logger.error("Rate limit exceeded for weather API");
 
         return ResponseEntity.status(429) // too many requests

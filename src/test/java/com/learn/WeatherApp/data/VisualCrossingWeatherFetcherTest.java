@@ -2,92 +2,88 @@ package com.learn.WeatherApp.data;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@PropertySource("classpath:application.properties")
 class VisualCrossingWeatherFetcherTest {
-    @Value("${weather.api.base-url}")
-    private String baseUrl;
-
-    @Value("${weather.api.key}")
-    private String apiKey;
+    private static final String BASE_URL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
+    private static final String API_KEY = "test-api-key";
+    private VisualCrossingWeatherFetcher fetcher;
 
     @BeforeEach
     void setUp() {
+        fetcher = new VisualCrossingWeatherFetcher(BASE_URL, API_KEY);
     }
 
     @Test
-    void shouldAddLocation() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        // set up
-        var fetcher = new VisualCrossingWeatherFetcher(baseUrl, apiKey);
-        fetcher.onLocation("77471");
+    void shouldBuildUrlWithLocationOnly() {
+        String expectedUrl = UriComponentsBuilder.fromUriString(BASE_URL + "/Houston")
+                .queryParam("key", API_KEY)
+                .toUriString();
 
-        Class<?> clazz = fetcher.getClass();
-        Method buildUrl = clazz.getDeclaredMethod("buildUrl");
-        buildUrl.setAccessible(true);
-
-        // retrieve
-        String url = (String) buildUrl.invoke(fetcher);
-
-        // test
-        assertEquals("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/77471",
-        url);
+        fetcher.onLocation("Houston");
+        assertEquals(expectedUrl, fetcher.buildUrl());
     }
 
     @Test
-    void shouldThrowErrorWithoutLocation() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-            var fetcher = new VisualCrossingWeatherFetcher(baseUrl, apiKey);
-            fetcher.fetchWeather();
-        });
+    void shouldBuildUrlWithLatLon() {
+        String expectedUrl = UriComponentsBuilder.fromUriString(BASE_URL + "/29.76,-95.36")
+                .queryParam("key", API_KEY)
+                .toUriString();
 
-        assertEquals("location cannot be null", ex.getLocalizedMessage());
+        fetcher.onLocation(29.76, -95.36);
+        assertEquals(expectedUrl, fetcher.buildUrl());
     }
 
     @Test
-    void shouldAddBothDates() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        // set up
-        var fetcher = new VisualCrossingWeatherFetcher(baseUrl, apiKey);
-        fetcher.onLocation("77471");
-        fetcher.betweenDates(LocalDate.of(2025, 01, 01), LocalDate.of(2025, 01, 02));
+    void shouldBuildUrlWithDateRange() {
+        LocalDate start = LocalDate.of(2025, 1, 1);
+        LocalDate end = LocalDate.of(2025, 1, 5);
 
-        Class<?> clazz = fetcher.getClass();
-        Method buildUrl = clazz.getDeclaredMethod("buildUrl");
-        buildUrl.setAccessible(true);
+        String expectedUrl = UriComponentsBuilder.fromUriString(BASE_URL + "/Houston/2025-01-01/2025-01-05")
+                .queryParam("key", API_KEY)
+                .toUriString();
 
-        // retrieve
-        String url = (String) buildUrl.invoke(fetcher);
-
-        // test
-        assertEquals("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/77471/2025-01-01/2025-01-02",
-                url);
+        fetcher.onLocation("Houston").betweenDates(start, end);
+        assertEquals(expectedUrl, fetcher.buildUrl());
     }
 
     @Test
-    void shouldAddStartDate() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        // set up
-        var fetcher = new VisualCrossingWeatherFetcher(baseUrl, apiKey);
-        fetcher.onLocation("77471");
-        fetcher.betweenDates(LocalDate.of(2025, 01, 01), null);
+    void shouldBuildUrlWithSingleIncludeOption() {
+        String expectedUrl = UriComponentsBuilder.fromUriString(BASE_URL + "/Houston")
+                .queryParam("include", "fcst")
+                .queryParam("key", API_KEY)
+                .toUriString();
 
-        Class<?> clazz = fetcher.getClass();
-        Method buildUrl = clazz.getDeclaredMethod("buildUrl");
-        buildUrl.setAccessible(true);
+        fetcher.onLocation("Houston").include("fcst");
+        assertEquals(expectedUrl, fetcher.buildUrl());
+    }
 
-        // retrieve
-        String url = (String) buildUrl.invoke(fetcher);
+    @Test
+    void shouldBuildUrlWithMultipleIncludeOptions() {
+        String expectedUrl = UriComponentsBuilder.fromUriString(BASE_URL + "/Houston")
+                .queryParam("include", "fcst,stats")
+                .queryParam("key", API_KEY)
+                .toUriString();
 
-        // test
-        assertEquals("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/77471/2025-01-01",
-                url);
+        fetcher.onLocation("Houston").include(new String[]{"fcst", "stats"});
+        assertEquals(expectedUrl, fetcher.buildUrl());
+    }
+
+    @Test
+    void shouldThrowExceptionIfLocationNotSet() {
+        IllegalStateException exception = assertThrows(IllegalStateException.class, fetcher::buildUrl);
+        assertEquals("location cannot be null", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionForInvalidIncludeOption() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> fetcher.include("invalid_option"));
+        assertEquals("invalid_option is not a query option", exception.getMessage());
     }
 }

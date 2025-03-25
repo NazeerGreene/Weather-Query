@@ -21,40 +21,38 @@ public class WeatherController {
         this.weatherService = weatherService;
     }
 
-    @GetMapping("/weather/zip/{zip}")
-    public ResponseEntity<WeatherResponse> forZipCode(@PathVariable() String zip) {
-        WeatherResponse response = weatherService.atZipCode(zip);
+    @GetMapping("/weather/location/{location}")
+    public ResponseEntity<WeatherResponse> forLocation(@PathVariable() String location) {
+        WeatherResponse response = weatherService.atLocation(location);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/weather/zip/{zip}/{start}")
-    public ResponseEntity<Object> forZipCodeBetweenDates(
-            @PathVariable String zip,
+    @GetMapping("/weather/location/{location}/{start}")
+    public ResponseEntity<Object> forLocationAtStartDate(
+            @PathVariable String location,
             @PathVariable String start
-    )
-    {
+    ) {
         try {
-            WeatherResponse response = weatherService.atZipCodeBetweenDates(zip, start, null);
+            WeatherResponse response = weatherService.atLocationBetweenDates(location, start, null);
             return ResponseEntity.ok(response);
         } catch (DateTimeParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Date format: yyyy-MM-dd");
+                    .body("Invalid date format submitted, valid date format: yyyy-MM-dd");
         }
     }
 
-    @GetMapping("/weather/zip/{zip}/{start}/{end}")
-    public ResponseEntity<Object> forZipCodeBetweenDates(
-            @PathVariable String zip,
+    @GetMapping("/weather/location/{location}/{start}/{end}")
+    public ResponseEntity<Object> forLocationBetweenDates(
+            @PathVariable String location,
             @PathVariable String start,
             @PathVariable String end
-    )
-    {
+    ) {
         try {
-            WeatherResponse response = weatherService.atZipCodeBetweenDates(zip, start, end);
+            WeatherResponse response = weatherService.atLocationBetweenDates(location, start, end);
             return ResponseEntity.ok(response);
         } catch (DateTimeParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Date format: yyyy-MM-dd");
+                    .body("Invalid date format submitted, valid date format: yyyy-MM-dd");
         }
     }
 }
