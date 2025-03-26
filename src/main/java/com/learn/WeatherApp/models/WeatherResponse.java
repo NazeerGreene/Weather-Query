@@ -1,8 +1,9 @@
 package com.learn.WeatherApp.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public record WeatherResponse(
+public record WeatherResponse (
         int queryCost,
         double latitude,
         double longitude,
@@ -11,4 +12,6 @@ public record WeatherResponse(
         String timezone,
         double tzoffset,
         List<WeatherDay> days
-) {}
+) implements Serializable {
+        public static final long serialVersionUID = 1L;
+}

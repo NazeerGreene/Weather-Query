@@ -1,5 +1,6 @@
 package com.learn.WeatherApp.models;
 
+import java.io.Serializable;
 import java.util.List;
 
 public record WeatherDay(
@@ -39,4 +40,6 @@ public record WeatherDay(
         String icon,
         List<String> stations,
         String source
-) {}
+) implements Serializable {
+    public static final long serialVersionUID = 1L;
+}
