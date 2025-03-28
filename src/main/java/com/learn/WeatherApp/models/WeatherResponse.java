@@ -2,6 +2,7 @@ package com.learn.WeatherApp.models;
 
 import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -16,5 +17,6 @@ public record WeatherResponse (
         double tzoffset,
         List<WeatherDay> days
 ) implements Serializable {
-        public static final long serialVersionUID = 1L;
+        @Serial
+        private static final long serialVersionUID = 1L;
 }
