@@ -31,9 +31,7 @@ public class WeatherController {
 
     /**
      * Retrieves weather data for a given location.
-     * <p>
      * This method caches the result using Spring's caching mechanism.
-     * </p>
      *
      * @param address The location (city, state, or coordinates) for which weather data is requested.
      * @return A {@link WeatherResponse} containing the weather data.
@@ -47,9 +45,7 @@ public class WeatherController {
 
     /**
      * Retrieves weather data for a given location at a specific start date.
-     * <p>
      * If an invalid date format is provided, a 400 BAD REQUEST response is returned.
-     * </p>
      *
      * @param location The location for which weather data is requested.
      * @param start    The start date in the format "yyyy-MM-dd".
@@ -72,9 +68,7 @@ public class WeatherController {
 
     /**
      * Retrieves weather data for a given location between a start and end date.
-     * <p>
      * If an invalid date format is provided, a 400 BAD REQUEST response is returned.
-     * </p>
      *
      * @param location The location for which weather data is requested.
      * @param start    The start date in the format "yyyy-MM-dd".

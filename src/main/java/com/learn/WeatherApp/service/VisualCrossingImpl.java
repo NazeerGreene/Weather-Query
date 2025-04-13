@@ -35,9 +35,10 @@ public class VisualCrossingImpl implements WeatherService {
     }
 
     /**
-     * Fetches weather data according to location, which could be one of two options:
+     * Fetches weather data according to location, which could be one of the following options:
      * 1. Zip code
      * 2. City name, State
+     * 3. longitude, latitude
      *
      * @param location The location to fetch weather data
      * @return WeatherResponse containing the corresponding data
