@@ -20,7 +20,7 @@ import java.util.Set;
  * making an API call. It builds the request URL dynamically based on provided parameters.
  */
 public class VisualCrossingWeatherFetcher implements WeatherFetcher {
-    private final String baseUrl;
+    private final String baseUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/";
     private final String apiKey;
     private String location;
 
@@ -56,11 +56,9 @@ public class VisualCrossingWeatherFetcher implements WeatherFetcher {
     /**
      * Constructs a new VisualCrossingWeatherFetcher.
      *
-     * @param baseUrl the base URL for the API
      * @param apiKey the API key for authentication
      */
-    public VisualCrossingWeatherFetcher(@NonNull String baseUrl, @NonNull String apiKey) {
-        this.baseUrl = baseUrl;
+    public VisualCrossingWeatherFetcher(@NonNull String apiKey) {
         this.apiKey = apiKey;
         this.includeList = new ArrayList<>();
     }

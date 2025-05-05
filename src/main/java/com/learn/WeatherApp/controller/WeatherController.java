@@ -2,7 +2,6 @@ package com.learn.WeatherApp.controller;
 
 import com.learn.WeatherApp.models.VcWeatherResponse;
 import com.learn.WeatherApp.service.WeatherService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,15 +30,13 @@ public class WeatherController {
 
     /**
      * Retrieves weather data for a given location.
-     * This method caches the result using Spring's caching mechanism.
      *
-     * @param address The location (city, state, or coordinates) for which weather data is requested.
+     * @param location The location (city, state, or coordinates) for which weather data is requested.
      * @return A {@link VcWeatherResponse} containing the weather data.
      */
-    @Cacheable(value = "location", key = "#address")
-    @GetMapping("/weather/location/{address}")
-    public VcWeatherResponse forLocation(@PathVariable() String address) {
-        VcWeatherResponse response = weatherService.atLocation(address);
+    @GetMapping("/weather/location/{location}")
+    public VcWeatherResponse forLocation(@PathVariable String location) {
+        VcWeatherResponse response = weatherService.atLocation(location);
         return response;
     }
 

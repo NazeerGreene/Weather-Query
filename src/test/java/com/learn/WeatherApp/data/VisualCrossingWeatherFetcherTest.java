@@ -17,7 +17,7 @@ class VisualCrossingWeatherFetcherTest {
 
     @BeforeEach
     void setUp() {
-        fetcher = new VisualCrossingWeatherFetcher(BASE_URL, API_KEY);
+        fetcher = new VisualCrossingWeatherFetcher(API_KEY);
     }
 
     @Test

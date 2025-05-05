@@ -5,6 +5,7 @@ import com.learn.WeatherApp.models.VcWeatherResponse;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,35 +17,35 @@ import java.time.format.DateTimeParseException;
 @Service
 public class VisualCrossingImpl implements WeatherService {
     // to build API request
-    private final String baseUrl;
     private final String apiKey;
 
     /**
-     * Constructs a VisualCrossingImpl with the required URL and API key.
+     * Constructs a VisualCrossingImpl with the required API key.
      *
-     * @param baseUrl The baseline URL for Visual Crossing API
      * @param apiKey The API key
      */
     @Autowired
     public VisualCrossingImpl(
-            @Value("${weather.api.base-url}") String baseUrl,
             @Value("${weather.api.key}") String apiKey
     ) {
-        this.baseUrl = baseUrl;
         this.apiKey = apiKey;
     }
 
     /**
      * Fetches weather data according to location, which could be one of the following options:
+     *
      * 1. Zip code
      * 2. City name, State
      * 3. longitude, latitude
      *
      * @param location The location to fetch weather data
-     * @return WeatherResponse containing the corresponding data
+     * @return VcWeatherResponse containing the corresponding data
+     *
+     * NOTE: This method caches the result using Spring's caching mechanism.
      */
+    @Cacheable(value = "location-weather", key = "#location")
     public VcWeatherResponse atLocation(@NonNull String location) {
-        return new VisualCrossingWeatherFetcher(baseUrl, apiKey)
+        return new VisualCrossingWeatherFetcher(apiKey)
                 .onLocation(location)
                 .fetch();
     }
@@ -58,14 +59,14 @@ public class VisualCrossingImpl implements WeatherService {
      * @param location The location to fetch.
      * @param start The start date of the requested interval.
      * @param end The end date for the interval requested; null if no end date needed, 16-day interval default.
-     * @return WeatherResponse with the corresponding weather data between start, end.
+     * @return VcWeatherResponse with the corresponding weather data between start, end.
      * @throws DateTimeParseException If start and end are not formatted properly.
      */
     public VcWeatherResponse atLocationBetweenDates (@NonNull String location, @NonNull String start, String end) throws DateTimeParseException {
         LocalDate date1 = parseDate(start);
         LocalDate date2 = (end != null ? parseDate(end) : null);
 
-        return new VisualCrossingWeatherFetcher(baseUrl, apiKey)
+        return new VisualCrossingWeatherFetcher(apiKey)
                 .onLocation(location)
                 .betweenDates(date1, date2)
                 .fetch();
