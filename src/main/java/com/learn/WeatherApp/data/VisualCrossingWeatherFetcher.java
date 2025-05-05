@@ -1,6 +1,6 @@
 package com.learn.WeatherApp.data;
 
-import com.learn.WeatherApp.models.WeatherResponse;
+import com.learn.WeatherApp.models.VcWeatherResponse;
 import lombok.NonNull;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -145,9 +145,9 @@ public class VisualCrossingWeatherFetcher implements WeatherFetcher {
      * @return a {@code WeatherResponse} object containing weather data
      */
     @Override
-    public WeatherResponse fetch() {
+    public VcWeatherResponse fetch() {
         String requestingUrl = buildUrl();
-        return new RestTemplate().getForObject(requestingUrl, WeatherResponse.class);
+        return new RestTemplate().getForObject(requestingUrl, VcWeatherResponse.class);
     }
 
     /**

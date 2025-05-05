@@ -4,7 +4,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
-public record WeatherDay(
+public record VcWeatherDay(
         String datetime,
         long datetimeEpoch,
         double tempmax,

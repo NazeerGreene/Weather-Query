@@ -1,6 +1,6 @@
 package com.learn.WeatherApp.controller;
 
-import com.learn.WeatherApp.models.WeatherResponse;
+import com.learn.WeatherApp.models.VcWeatherResponse;
 import com.learn.WeatherApp.service.WeatherService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
@@ -34,12 +34,12 @@ public class WeatherController {
      * This method caches the result using Spring's caching mechanism.
      *
      * @param address The location (city, state, or coordinates) for which weather data is requested.
-     * @return A {@link WeatherResponse} containing the weather data.
+     * @return A {@link VcWeatherResponse} containing the weather data.
      */
     @Cacheable(value = "location", key = "#address")
     @GetMapping("/weather/location/{address}")
-    public WeatherResponse forLocation(@PathVariable() String address) {
-        WeatherResponse response = weatherService.atLocation(address);
+    public VcWeatherResponse forLocation(@PathVariable() String address) {
+        VcWeatherResponse response = weatherService.atLocation(address);
         return response;
     }
 
@@ -58,7 +58,7 @@ public class WeatherController {
             @PathVariable String start
     ) {
         try {
-            WeatherResponse response = weatherService.atLocationBetweenDates(location, start, null);
+            VcWeatherResponse response = weatherService.atLocationBetweenDates(location, start, null);
             return ResponseEntity.ok(response);
         } catch (DateTimeParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -83,7 +83,7 @@ public class WeatherController {
             @PathVariable String end
     ) {
         try {
-            WeatherResponse response = weatherService.atLocationBetweenDates(location, start, end);
+            VcWeatherResponse response = weatherService.atLocationBetweenDates(location, start, end);
             return ResponseEntity.ok(response);
         } catch (DateTimeParseException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

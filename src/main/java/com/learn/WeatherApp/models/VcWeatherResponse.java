@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @RedisHash(timeToLive = 3600_000) // one hour
-public record WeatherResponse (
+public record VcWeatherResponse(
         int queryCost,
         double latitude,
         double longitude,
@@ -15,7 +15,7 @@ public record WeatherResponse (
         String address,
         String timezone,
         double tzoffset,
-        List<WeatherDay> days
+        List<VcWeatherDay> days
 ) implements Serializable {
         @Serial
         private static final long serialVersionUID = 1L;

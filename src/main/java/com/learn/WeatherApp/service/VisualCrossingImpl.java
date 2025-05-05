@@ -1,7 +1,7 @@
 package com.learn.WeatherApp.service;
 
 import com.learn.WeatherApp.data.VisualCrossingWeatherFetcher;
-import com.learn.WeatherApp.models.WeatherResponse;
+import com.learn.WeatherApp.models.VcWeatherResponse;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,7 @@ public class VisualCrossingImpl implements WeatherService {
      * @param location The location to fetch weather data
      * @return WeatherResponse containing the corresponding data
      */
-    public WeatherResponse atLocation(@NonNull String location) {
+    public VcWeatherResponse atLocation(@NonNull String location) {
         return new VisualCrossingWeatherFetcher(baseUrl, apiKey)
                 .onLocation(location)
                 .fetch();
@@ -61,7 +61,7 @@ public class VisualCrossingImpl implements WeatherService {
      * @return WeatherResponse with the corresponding weather data between start, end.
      * @throws DateTimeParseException If start and end are not formatted properly.
      */
-    public WeatherResponse atLocationBetweenDates (@NonNull String location, @NonNull String start, String end) throws DateTimeParseException {
+    public VcWeatherResponse atLocationBetweenDates (@NonNull String location, @NonNull String start, String end) throws DateTimeParseException {
         LocalDate date1 = parseDate(start);
         LocalDate date2 = (end != null ? parseDate(end) : null);
 

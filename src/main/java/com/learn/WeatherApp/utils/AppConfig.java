@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.learn.WeatherApp.models.WeatherResponse;
+import com.learn.WeatherApp.models.VcWeatherResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -27,8 +27,8 @@ public class AppConfig {
     }
 
     @Bean
-    public RedisTemplate<String, WeatherResponse> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, WeatherResponse> template = new RedisTemplate<>();
+    public RedisTemplate<String, VcWeatherResponse> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, VcWeatherResponse> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
 
         // JSON Serializer
@@ -42,7 +42,7 @@ public class AppConfig {
         // helps when storing complex object hierarchies in Redis
         objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
 
-        Jackson2JsonRedisSerializer<WeatherResponse> serializer = new Jackson2JsonRedisSerializer<>(objectMapper, WeatherResponse.class);
+        Jackson2JsonRedisSerializer<VcWeatherResponse> serializer = new Jackson2JsonRedisSerializer<>(objectMapper, VcWeatherResponse.class);
 
         // Set serializers for key and value
         template.setKeySerializer(new StringRedisSerializer());

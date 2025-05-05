@@ -1,11 +1,11 @@
 package com.learn.WeatherApp.service;
 
-import com.learn.WeatherApp.models.WeatherResponse;
+import com.learn.WeatherApp.models.VcWeatherResponse;
 
 /**
  * The interface that any service layer fetchers should conform to.
  */
 public interface WeatherService {
-    WeatherResponse atLocation(String zip);
-    WeatherResponse atLocationBetweenDates(String zip, String start, String end);
+    VcWeatherResponse atLocation(String zip);
+    VcWeatherResponse atLocationBetweenDates(String zip, String start, String end);
 }
